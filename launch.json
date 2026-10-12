@@ -1,0 +1,28 @@
+{
+  "kind": "evm_project",
+  "token": {
+    "contract": "LaunchToken",
+    "name": "Dead Drop",
+    "symbol": "DROP",
+    "decimals": 18
+  },
+  "contracts": [
+    {
+      "contract": "DeadDrop",
+      "constructorArgs": [
+        "$owner",
+        "$token",
+        "0xd34a99bc0f67ae1bbd63c660e6d0b0dd03e263b7",
+        "0x000000000004444c5dc75cb358380d2e3de08a90",
+        "0x784ff9a3ac5d88a30bfff6f7f2a270161fbe6000"
+      ]
+    }
+  ],
+  "pool": {
+    "pairedCurrency": "0xd34a99bc0f67ae1bbd63c660e6d0b0dd03e263b7",
+    "fee": 12500,
+    "tickSpacing": 60,
+    "initialPrice": "79228162514264337593543950336"
+  },
+  "notes": "DEAD DROP: every wallet has a dead drop. LaunchToken is DROP (Dead Drop), a fixed-supply ERC-20 with plain transfers and no constructor arguments; the factory mints and splits its supply. DeadDrop is the one application contract. Its constructor takes, in order: owner_ ($owner, the launch owner, Ownable2Step with renounceOwnership disabled, whose only power is setStamp between 0.01 and 1 IMD), drop ($token, the launch token), imd (the paired currency 0xd34a99bc0f67ae1bbd63c660e6d0b0dd03e263b7, in which stamps and prices are quoted), poolManager (Uniswap v4 PoolManager 0x000000000004444c5dc75cb358380d2e3de08a90 on Ethereum) and hooks (the IMD launch hook 0x784ff9a3ac5d88a30bfff6f7f2a270161fbe6000, which only gates pool initialization). The constructor makes no external calls; it sorts drop and imd to derive the launch pool key (fee 12500, tick spacing 60, that hook) and checks the pool on first use. Wallets open a drop with an x25519 public key and a price to read; leave pulls stamp plus tip in IMD, swaps all of it to DROP on the launch pool in one exact-input swap, burns the stamp's pro rata share to 0x000000000000000000000000000000000000dEaD and escrows the tip's share until the recipient answers or the sender takes it back after 14 days; knock burns one stamp for a wallet with no drop. DeadDrop holds no launch supply: it only holds DROP escrow from notes left after launch. The pool pairs DROP with IMD; the factory supplies the pool guard, the LP position and the MerkleDistributor."
+}
